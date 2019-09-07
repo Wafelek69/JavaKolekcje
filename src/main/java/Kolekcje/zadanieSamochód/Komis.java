@@ -2,12 +2,13 @@ package Kolekcje.zadanieSamochód;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Komis {
 
-    List<Samochód> listaSamochodów = new ArrayList<>();
-    Set<Samochód> setSamochodów = new HashSet<>();
-    SortedSet<Samochód>sortSamochodow= new TreeSet<>(Samochód.BY_ROK);
+    public List<Samochód> listaSamochodów = new ArrayList<>();
+    public Set<Samochód> setSamochodów = new HashSet<>();
+    public SortedSet<Samochód>sortSamochodow= new TreeSet<>(Samochód.BY_ROK);
 
   public static Samochód samochód1 = new Samochód("Audi","80",2010,12000);
   public static Samochód samochód2 = new Samochód("Peugeot","206",2005,9000);
@@ -29,26 +30,28 @@ public class Komis {
         sortSamochodow.add(samochód);
         setSamochodów.add(samochód);
 
-
     }
 
-    public void kupionoSamochód(Samochód  samochód){
-        if (listaSamochodów.contains(samochód)){
-            listaSamochodów.remove(samochód);
+    public void kupionoSamochód(Samochód  samochód) {
+
+        int licznik = 0;
+        for (Samochód auto : listaSamochodów) {
+            if (auto.equals(samochód)) {
+                licznik++;
+            }
+        }
+        if (licznik == 1) {
             setSamochodów.remove(samochód);
             sortSamochodow.remove(samochód);
-            System.out.println("Kupiono: "+samochód);
-
-        }else {
-            System.out.println("Nie ma takiego samochodu: ");
         }
+        listaSamochodów.remove(samochód);
     }
 
 
 public List<Samochód> znajdzSamochodyMarki(String marka){
         List<Samochód> znajdzSamochodyMarki= new ArrayList<>();
         for (Samochód samochód: listaSamochodów){
-            if(samochód.getMarka().equals(marka)){
+            if(samochód.getMarka().equalsIgnoreCase(marka)){
                 znajdzSamochodyMarki.add(samochód);
             }
         }
@@ -61,12 +64,10 @@ public List<Samochód> znajdzSamochodyMarki(String marka){
     public List<Samochód> znajdzSamochodyMarkiIModelu(String marka, String model){
         List<Samochód> znajdzSamochodyMarki= new ArrayList<>();
         for (Samochód samochód: listaSamochodów){
-            if(samochód.getMarka().equals(marka)){
+            if(samochód.getMarka().equalsIgnoreCase(marka)&& samochód.getModel().equalsIgnoreCase(model)){
                 znajdzSamochodyMarki.add(samochód);
             }
-            if (samochód.getModel().equals(model)){
-                znajdzSamochodyMarki.add(samochód);
-            }
+
         }
         if (znajdzSamochodyMarki.isEmpty()){
             System.out.println("Brak wprowadzonej poprawnie marki lub modelu: ");
@@ -128,20 +129,24 @@ public List<Samochód> znajdzSamochodyMarki(String marka){
         return znajdz;
     }
 
-    public Set<Samochód>wypiszDostepneSamochody(){
-        for(Samochód samochód :setSamochodów){
-            System.out.println(samochód);
-        }
-     return setSamochodów;
+    public void wypiszDostepneSamochody(){
+
+            System.out.println(setSamochodów);
+
+    }
+    public List<Samochód>samochodyDoKwotyJava8(int cena){
+        return listaSamochodów.stream().filter(samochód -> samochód.getCena()<=cena).collect(Collectors.toList());
     }
 
-
+    public List<Samochód>samochodyZPrzedzialuLatJava8(int dataOd, int dataDo){
+        return listaSamochodów.stream().filter(samochód -> samochód.getRokProdukcji()>=dataOd && samochód.getRokProdukcji()<=dataDo).collect(Collectors.toList());
+    }
 
     ///////////////////////////////////////MAIN
     public static void main(String[] args) {
 
     Komis komis = new Komis();
-
+    Myjnia myjnia = new Myjnia();
     komis.dodajSamochód(samochód1);
     komis.dodajSamochód(samochód2);
     komis.dodajSamochód(samochód3);
@@ -155,15 +160,20 @@ public List<Samochód> znajdzSamochodyMarki(String marka){
     komis.dodajSamochód(samochód11);
     komis.dodajSamochód(samochód12);
 
-//        System.out.println("Aktualna lista samochodów: " + komis.listaSamochodów);
-//        komis.kupionoSamochód(samochód1);
+        //System.out.println("Aktualna lista samochodów: " + komis.listaSamochodów);
+        //System.out.println("set Samochodów"+komis.setSamochodów);
+       // System.out.println("");
+       // komis.kupionoSamochód(samochód1);
 //        System.out.println("Aktualna lista samochodów do kupienia: "+ komis.listaSamochodów);
 //
-//        System.out.println(komis.znajdzSamochodyMarki("Fiat"));
-//        System.out.println(komis.znajdzSamochodyMarkiIModelu("Fiat","Bravo II"));
-//        System.out.println(komis.znajdzSamochodZPrzedzialuLat(2000,2019));
-//        System.out.println(komis.znajdzSamochodyDoKwoty(12000));
-        komis.wypiszDostepneSamochody();
+      //System.out.println(komis.znajdzSamochodyMarki("Audi"));
+        //System.out.println(komis.znajdzSamochodyMarkiIModelu("Fiat","Bravo II"));
+      //System.out.println(komis.znajdzSamochodZPrzedzialuLat(2015,2019));
+      //System.out.println(komis.znajdzSamochodyDoKwoty(12000));
+        //System.out.println(komis.samochodyDoKwotyJava8(12000));
+      //komis.wypiszDostepneSamochody();
+       myjnia.dodajSamochód(samochód1);
+       myjnia.umyjWszystkieSamochody();
 
 
 

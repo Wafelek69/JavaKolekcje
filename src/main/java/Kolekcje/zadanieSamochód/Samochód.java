@@ -2,7 +2,7 @@ package Kolekcje.zadanieSamochód;
 
 import java.util.Comparator;
 import java.util.Objects;
-//
+
 public class Samochód {
 
     private String marka;
@@ -63,7 +63,7 @@ public class Samochód {
 
     @Override
     public int hashCode() {
-        return Objects.hash(marka, model, rokProdukcji, cena);
+        return Objects.hash(marka, model, rokProdukcji);
     }
 
     @Override
